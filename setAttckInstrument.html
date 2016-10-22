@@ -1,0 +1,52 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+ <HEAD>
+  <TITLE> attack param set </TITLE>
+  <META NAME="Generator" CONTENT="EditPlus">
+  <META NAME="Author" CONTENT="">
+  <META NAME="Keywords" CONTENT="">
+  <META NAME="Description" CONTENT="">
+  <meta charset="UTF-8"> 
+ </HEAD>
+
+ <BODY>
+  <TABLE>
+ <form action="setAttckInstrument.html" method="get">
+   <TR>
+	<TD>debug<INPUT TYPE="radio" NAME="programchoose" value="debug"></TD>
+	<TD>attack<INPUT TYPE="radio" NAME="programchoose" value="attack" checked></TD>	
+    <TD>test<INPUT TYPE="radio" NAME="programchoose" value="test"></TD>
+  </TR>
+   <TR>
+	<TD>上期所<INPUT TYPE="radio" NAME="exchangeM" value="0" checked TD>
+	<TD>郑商所<INPUT TYPE="radio" NAME="exchangeM" value="1"></TD>
+
+    <TD>大商所<INPUT TYPE="radio" NAME="exchangeM" value="2"></TD>
+        <!--  
+    <TD>中金所<INPUT TYPE="radio" NAME="exchangeM" value="3"></TD>
+    -->	
+  </TR>
+  <TR>
+	<TD>instrument1<INPUT TYPE="text" NAME="instrument1"></TD>
+	<TD>direction1<INPUT TYPE="text" NAME="direction1"></TD>	
+    <TD>price1<INPUT TYPE="text" NAME="price1"></TD>
+    <TD>vol1<INPUT TYPE="text" NAME="vol1" value="${attackvol}"></TD>
+     <TD>closeprice1<INPUT TYPE="text" NAME="closeprice1" ></TD>
+    
+  </TR>
+    <TR>
+	<TD>instrument2<INPUT TYPE="text" NAME="instrument2"></TD>
+    <TD>direction2<INPUT TYPE="text" NAME="direction2"></TD>	
+	<TD>price2<INPUT TYPE="text" NAME="price2"></TD>	
+    <TD>vol2<INPUT TYPE="text" NAME="vol2" ></TD>
+  </TR>
+      <TR>
+	<TD colspan=2>result:<br>${result}</TD>
+	
+ 
+  </TABLE>
+  <a href=setAttckInstrument.html>check</a>
+  <INPUT TYPE="submit">
+  </form>
+ </BODY>
+</HTML>

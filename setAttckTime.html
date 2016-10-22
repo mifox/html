@@ -1,0 +1,46 @@
+﻿<html>
+<head>
+<script src="avalon.min.js"></script>
+</head>
+<body>
+<form action="setAttckTime.html" method="get">
+<div ms-controller="hello">
+<h1>{{h}}</h1>
+<h1>{{m}}</h1>
+<h1>{{s}}</h1>
+  <TABLE>
+ 
+
+  <TR>
+	<TD>TestTime<INPUT ms-duplex="TestTime" ms-data-duplex-observe="radioModel"  NAME="TestTime"></TD>
+  </TR>
+    <TR>
+	<TD>TestTime2<INPUT ms-duplex="TestTime2" ms-data-duplex-observe="radioModel" NAME="TestTime2" ></TD>
+  </TR>
+    <TR>
+	<TD>AttackTime<INPUT  ms-duplex="AttackTime" ms-data-duplex-observe="radioModel" NAME="AttackTime"></TD>
+  </TR>
+      <TR>
+	<TD colspan=2>result:<br>${result}</TD>
+	
+ </div>
+  </TABLE>
+  <INPUT TYPE="submit">
+</form>
+
+<script>
+var oDate = new Date(); 
+var h = oDate.getHours(); 
+var m = oDate.getMinutes(); 
+var s = oDate.getSeconds(); 
+var model = avalon.define('hello', function(vm){
+          vm.hours =h;
+          vm.minutes = m;
+          vm.seconds =s;
+          vm.TestTime = ((h*60+m+1)*60+s)*1000;
+	 vm.TestTime2 = ((h*60+m+5)*60+s)*1000;
+	  vm.AttackTime = ((h*60+m+6)*60+s)*1000;
+});
+</script>
+</body>
+</html>
