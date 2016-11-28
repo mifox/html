@@ -98,22 +98,22 @@ function drawLink(d) {
   context.moveTo(d.source.x, d.source.y);
   context.lineTo(d.target.x*0.995, d.target.y*0.995);
   //画箭头   
-  ctx.translate(end[0],end[1]);  
+  context.translate(d.source.x,d.source.y);  
   //我的箭头本垂直向下，算出直线偏离Y的角，然后旋转 ,rotate是顺时针旋转的，所以加个负号  
   var ang=(d.target.x-d.source.x)/(d.target.y-d.source.y);  
   ang=Math.atan(ang);  
   if(d.target.y-d.source.y >= 0){  
-    ctx.rotate(-ang);  
+    context.rotate(-ang);  
   }else{  
-    ctx.rotate(Math.PI-ang);//加个180度，反过来  
+    context.rotate(Math.PI-ang);//加个180度，反过来  
   }   
-  ctx.lineTo(-5,-10);   
-  ctx.lineTo(0,-5);   
-  ctx.lineTo(5,-10);   
-  ctx.lineTo(0,0);   
-  ctx.fill(); //箭头是个封闭图形  
-  ctx.restore();   //恢复到堆的上一个状态，其实这里没什么用。  
-  ctx.closePath();  
+  context.lineTo(-5,-10);   
+  context.lineTo(0,-5);   
+  context.lineTo(5,-10);   
+  context.lineTo(0,0);   
+  context.fill(); //箭头是个封闭图形  
+  context.restore();   //恢复到堆的上一个状态，其实这里没什么用。  
+  context.closePath();  
 }
 
 function drawNode(d) {
