@@ -97,6 +97,7 @@ function dragended() {
 function drawLink(d) {
   context.moveTo(d.source.x, d.source.y);
   context.lineTo(d.target.x, d.target.y);
+  context.arc(d.target.x, d.target.y, 0.2, -0.5, +0.5);
   //context.arc(d.target.x*0.9,d.target.y*0.9, 0.2, 0, 2 * Math.PI);
 
 }
