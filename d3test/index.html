@@ -96,24 +96,10 @@ function dragended() {
 
 function drawLink(d) {
   context.moveTo(d.source.x, d.source.y);
-  context.lineTo(d.target.x*0.995, d.target.y*0.995);
+  context.lineTo(d.target.x, d.target.y);
   //画箭头   
-  context.translate(d.source.x,d.source.y);  
+  context.arc(d.target.x*0.9,d.target.y*0.9, 0.2, 0, 2 * Math.PI);
   //我的箭头本垂直向下，算出直线偏离Y的角，然后旋转 ,rotate是顺时针旋转的，所以加个负号  
-  var ang=(d.target.x-d.source.x)/(d.target.y-d.source.y);  
-  ang=Math.atan(ang);  
-  if(d.target.y-d.source.y >= 0){  
-    context.rotate(-ang);  
-  }else{  
-    context.rotate(Math.PI-ang);//加个180度，反过来  
-  }   
-  context.lineTo(-5,-10);   
-  context.lineTo(0,-5);   
-  context.lineTo(5,-10);   
-  context.lineTo(0,0);   
-  context.fill(); //箭头是个封闭图形  
-  context.restore();   //恢复到堆的上一个状态，其实这里没什么用。  
-  context.closePath();  
 }
 
 function drawNode(d) {
