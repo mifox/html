@@ -51,7 +51,12 @@ d3.json("graph.json", function(error, graph) {
     context.translate(width / 2, height / 2);
 
     context.beginPath();
-    graph.links.forEach(drawLink);
+    graph.links.forEach(drawLink1);
+    context.strokeStyle = "#aaa";
+    context.stroke();
+	
+	context.beginPath();
+    graph.links.forEach(drawLink2);
     context.strokeStyle = "#aaa";
     context.stroke();
 
@@ -61,6 +66,7 @@ d3.json("graph.json", function(error, graph) {
       context.fillStyle = color(user.key);
       context.fill();
     });
+	
 
     context.restore();
   }
@@ -72,8 +78,8 @@ d3.json("graph.json", function(error, graph) {
   function mousemoved() {
     var a = this.parentNode, m = d3.mouse(this), d = simulation.find(m[0] - width / 2, m[1] - height / 2, searchRadius);
     if (!d) return a.removeAttribute("href"), a.removeAttribute("title");
-    a.setAttribute("href", "http://bl.ocks.org/" + (d.user ? d.user + "/" : "") + d.id);
-    a.setAttribute("title", d.id + (d.user ? " by " + d.user : "") + (d.description ? "\n" + d.description : ""));
+    a.setAttribute("href", "http://" + (d.user ? d.user + "/" : "") + d.stockcode);
+    a.setAttribute("title", (d.user ? "" + d.user : "")+"|" + d.stockcode +  (d.description ? "\n" + d.description : ""));
   }
 });
 
@@ -94,10 +100,28 @@ function dragended() {
   d3.event.subject.fy = null;
 }
 
-function drawLink(d) {
+function drawLink1(d) {
+  
+  context.lineWidth = 1;
   context.moveTo(d.source.x, d.source.y);
+  context.lineTo(d.source.x/3+d.target.x/3*2, d.source.y/3 +d.target.y/3*2);
+  
+  //context.lineWidth = 2;
+  //context.moveTo(d.target.x, d.target.y);
+  //context.lineTo(d.target.x, d.target.y);
+  //context.arc(d.target.x*0.9,d.target.y*0.9, 0.2, 0, 2 * Math.PI);
+
+}
+
+function drawLink2(d) {
+  
+  
+  context.lineWidth = 3;
+  context.moveTo(d.source.x/3+d.target.x/3*2, d.source.y/3 +d.target.y/3*2);
   context.lineTo(d.target.x, d.target.y);
-  context.arc(d.target.x, d.target.y, 1, -1, +1);
+  //context.lineWidth = 2;
+  //context.moveTo(d.target.x, d.target.y);
+  //context.lineTo(d.target.x, d.target.y);
   //context.arc(d.target.x*0.9,d.target.y*0.9, 0.2, 0, 2 * Math.PI);
 
 }
