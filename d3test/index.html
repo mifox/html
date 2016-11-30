@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<a target="_blank" style="outline:none;"><canvas width="960" height="960"></canvas></a>
-<script src="https://d3js.org/d3.v4.min.js"></script>
+<a target="_blank" style="outline:none;"><canvas width="1460" height="780"></canvas></a>
+<script src="d3.v4.js"></script>
 <script>
 
 var canvas = document.querySelector("canvas"),
@@ -21,23 +21,84 @@ var simulation = d3.forceSimulation()
 
 d3.json("graph.json", function(error, graph) {
   if (error) throw error;
+  
 
   var users = d3.nest()
       .key(function(d) { return d.user; })
       .entries(graph.nodes)
       .sort(function(a, b) { return b.values.length - a.values.length; });
 
+  var stockids ;
+    stockids= d3.nest()
+            .key(function(d) { return d.id; })
+            .map(graph.stockonboard);
+      //.entries()
+      //.sort(function(a, b) { return b.values.length - a.values.length; });
+
+  var stockcodes = d3.nest()
+      .key(function(d) { return d.stockcode; })
+      .entries(graph.stockonboard)
+      .sort(function(a, b) { return b.values.length - a.values.length; });
+
+  var usersid = d3.nest()
+      .key(function(d) { return d.id; })
+      .entries(graph.nodes)
+      .sort(function(a, b) { return b.values.length - a.values.length; });
+
+  users.forEach(function(user)
+  {
+        user.values.forEach(function(s)
+          {
+            if(stockids.has(s.id))
+              s.color = '#FF3300';
+             else
+             {
+               //alert(s.id);
+             }
+          }
+        )
+  }
+  );
+  //usersid['1'][0].color = "66ff00";
+  usersid['434'].values[0].color = "#76EE00";
+  //alert (usersid['215'].values[0].color);
   color.domain(users.map(function(d) { return d.key; }));
 
+  a=document.getElementById('getstock');
+  c = function() { 
+        //alert("xxxx"); 
+        t=document.getElementById('input1').value;
+        //alert(t); 
+        if(stockids.has(t))
+          {
+            //alert(t);
+            //a=usersid['434'].values[0];
+            usersid[t].values[0].color = "#76EE00";
+          }
+        //s.color = '#FF3300';
+  }; 
+  a.onclick = c;
+  //d3.select("#getstock")
+  //.on("click",colorstock);
+
+  
+  function colorstock() 
+  {
+     //d = d3.select("#input1");
+     alert(d); 
+  
+  }
   simulation
       .nodes(graph.nodes)
-      .on("tick", ticked);
+      .on("tick", ticked)
+      ;
 
   simulation.force("link")
       .links(graph.links);
 
   d3.select(canvas)
       .on("mousemove", mousemoved)
+      .on("dblclick", dblclick)
       .call(d3.drag()
           .container(canvas)
           .subject(dragsubject)
@@ -60,11 +121,14 @@ d3.json("graph.json", function(error, graph) {
     context.strokeStyle = "#aaa";
     context.stroke();
 
+    //alert(users);
     users.forEach(function(user) {
       context.beginPath();
+      //context.fillStyle = color(user.key); //"66ff00"// color(user.key);
+      //context.fill();
       user.values.forEach(drawNode);
-      context.fillStyle = color(user.key);
       context.fill();
+      
     });
 	
 
@@ -77,10 +141,37 @@ d3.json("graph.json", function(error, graph) {
 
   function mousemoved() {
     var a = this.parentNode, m = d3.mouse(this), d = simulation.find(m[0] - width / 2, m[1] - height / 2, searchRadius);
-    if (!d) return a.removeAttribute("href"), a.removeAttribute("title");
-    a.setAttribute("href", "http://" + (d.user ? d.user + "/" : "") + d.stockcode);
-    a.setAttribute("title", (d.user ? "" + d.user : "")+"|" + d.stockcode +  (d.description ? "\n" + d.description : ""));
+    if (!d) return  a.removeAttribute("title"); //a.removeAttribute("href"),
+    //a.setAttribute("href", "http://" + (d.user ? d.user + "/" : "") + d.stockcode);
+    
+    a.setAttribute("title", d.id +"|"+ (d.user ? "" + d.user : "")+"|" + d.stockcode +  (d.description ? "\n" + d.description : ""));
   }
+  
+
+  function dblclick() {
+    //alert('ddd1');
+    var a = this.parentNode, m = d3.mouse(this), d = simulation.find(m[0] - width / 2, m[1] - height / 2, searchRadius);
+    if (d)
+    {
+      //d.fx = m[0] - width / 2;
+      //d.fy = m[1] - height / 2;
+      //alert('ddd');
+      d.vx = m[0] - width / 2;
+      d.vy = m[1] - height / 2;
+      //alert(d.fx)
+      //alert(d.vx)
+      if(d.color ===undefined )
+      {
+        d.color = '#FF3300'
+      }
+      else
+      {
+        delete d.color
+      }
+      d.fx = null;
+      d.fx = null;
+    }
+}
 });
 
 function dragstarted() {
@@ -94,10 +185,13 @@ function dragged() {
   d3.event.subject.fy = d3.event.y;
 }
 
+
+
+
 function dragended() {
   if (!d3.event.active) simulation.alphaTarget(0);
-  d3.event.subject.fx = null;
-  d3.event.subject.fy = null;
+  d3.event.subject.fx = d3.event.x;
+  d3.event.subject.fy = d3.event.y;
 }
 
 function drawLink1(d) {
@@ -123,12 +217,65 @@ function drawLink2(d) {
   //context.moveTo(d.target.x, d.target.y);
   //context.lineTo(d.target.x, d.target.y);
   //context.arc(d.target.x*0.9,d.target.y*0.9, 0.2, 0, 2 * Math.PI);
-
+  
 }
 
 function drawNode(d) {
   context.moveTo(d.x + 3, d.y);
   context.arc(d.x, d.y, 3, 0, 2 * Math.PI);
+  if(d.color ===undefined)
+  { 
+    if(d.id == '434')
+    {   
+        //alert(d.user);
+        context.fillStyle = "#FF3300"// color(user.key);
+        
+    }
+    else
+    {
+        context.fillStyle = "#000000" //color(d.id); //"66ff00"// color(user.key);
+    }
+  }
+  else
+  {
+    context.fillStyle = "#FF3300"
+  }
+    
+  //alert(d.key)
+  
 }
 
+function drawNode(d) {
+  context.moveTo(d.x + 3, d.y);
+  context.arc(d.x, d.y, 3, 0, 2 * Math.PI);
+  if(d.color ===undefined)
+  { 
+    if(d.id == '360')
+    {   
+        //alert(d.user);
+        context.fillStyle = "#FF3300"// color(user.key);
+        
+    }
+    else
+    {
+        context.fillStyle = "#000000" //color(d.id); //"66ff00"// color(user.key);
+    }
+  }
+  else
+  {
+    context.fillStyle = d.color
+  }
+    
+  //alert(d.key)
+  
+}
+
+
+
 </script>
+<head></head>
+<body>
+<input type="text" id="input1" />
+<input type="button" id="getstock"  value="点我" />
+</body>
+</html>
