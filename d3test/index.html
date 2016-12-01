@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<a target="_blank" style="outline:none;"><canvas width="1460" height="780"></canvas></a>
+<a target="_blank" style="outline:none;"><canvas width="3000" height="3000"></canvas></a>
 <script src="d3.v4.min.js"></script>
 <script>
 
 var canvas = document.querySelector("canvas"),
     context = canvas.getContext("2d"),
-    width = canvas.width,
-    height = canvas.height,
+    width = canvas.width*1,
+    height = canvas.height*1,
     searchRadius = 40;
 
 var color = d3.scaleOrdinal()
@@ -37,28 +37,29 @@ d3.json("graph.json", function(error, graph) {
 
   var stockcodes = d3.nest()
       .key(function(d) { return d.stockcode; })
-      .entries(graph.stockonboard)
-      .sort(function(a, b) { return b.values.length - a.values.length; });
+      .map(graph.stockonboard);
+      // .entries(graph.stockonboard)
+      // .sort(function(a, b) { return b.values.length - a.values.length; });
 
   var usersid = d3.nest()
       .key(function(d) { return d.id; })
       .entries(graph.nodes)
       .sort(function(a, b) { return b.values.length - a.values.length; });
 
-  users.forEach(function(user)
-  {
-        user.values.forEach(function(s)
-          {
-            if(stockids.has(s.id))
-              s.color = '#FF3300';
-             else
-             {
-               //alert(s.id);
-             }
-          }
-        )
-  }
-  );
+  // users.forEach(function(user)
+  // {
+  //       user.values.forEach(function(s)
+  //         {
+  //           if(stockids.has(s.id))
+  //             s.color = '#FF3300';
+  //            else
+  //            {
+  //              //alert(s.id);
+  //            }
+  //         }
+  //       )
+  // }
+  // );
   //usersid['1'][0].color = "66ff00";
   usersid['434'].values[0].color = "#76EE00";
   //alert (usersid['215'].values[0].color);
@@ -69,12 +70,22 @@ d3.json("graph.json", function(error, graph) {
         //alert("xxxx"); 
         t=document.getElementById('input1').value;
         //alert(t); 
-        if(stockids.has(t))
-          {
-            //alert(t);
-            //a=usersid['434'].values[0];
-            usersid[t].values[0].color = "#76EE00";
-          }
+        if(stockcodes.has(t))
+        {
+          id = stockcodes.get(t)[0].id;
+         
+          if(stockids.has(id))
+            {
+              //alert(t);
+              //a=usersid['434'].values[0];
+              usersid[id].values[0].color = "#76EE00";
+              usersid[id].values[0].radius = 100;
+            }
+        }
+        else
+        {
+          alert('股票代码不存在！'+t);
+        }
         //s.color = '#FF3300';
   }; 
   a.onclick = c;
@@ -247,7 +258,20 @@ function drawNode(d) {
 
 function drawNode(d) {
   context.moveTo(d.x + 3, d.y);
-  context.arc(d.x, d.y, 3, 0, 2 * Math.PI);
+  if (d.radius !== undefined)
+  {
+    if(d.radius > 10)
+    {
+        d.radius = d.radius - 3;
+    }
+    context.arc(d.x, d.y, d.radius, 0, 2 * Math.PI);
+      
+  }
+  else
+  {
+      context.arc(d.x, d.y, 6, 0, 2 * Math.PI);
+  }
+  
   if(d.color ===undefined)
   { 
     if(d.id == '360')
@@ -275,7 +299,11 @@ function drawNode(d) {
 </script>
 <head></head>
 <body>
-<input type="text" id="input1" />
-<input type="button" id="getstock"  value="点我" />
+
+<div id="left_layer" style="position:fixed; top:40px; left:0px;">
+  <input type="text" id="input1" />
+  <input type="button" id="getstock"  value="输入股票代码" />
+  <a href="javascript:;" onclick="javascript:document.getElementById('left_layer').style.display='none';">关闭</a>
+</div>
 </body>
 </html>
