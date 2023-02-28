@@ -19,7 +19,7 @@ var simulation = d3.forceSimulation()
     .force("x", d3.forceX())
     .force("y", d3.forceY());
 
-d3.json("graph.json", function(error, graph) {
+d3.json("graph_stock.json", function(error, graph) {
   if (error) throw error;
   
 
